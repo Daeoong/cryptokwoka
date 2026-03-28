@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Бесшовная карусель с клоуном</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            text-align: center;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+        }
+
+        .main-section {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 50px;
+            gap: 50px;
+        }
+
+        /* Карусели */
+        .carousel-container {
+            position: relative;
+            width: 120px;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .carousel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            animation: scrollUp 6s linear infinite; /* одинаковая скорость */
+        }
+
+        .carousel img {
+            width: 100px; 
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        @keyframes scrollUp {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        /* Центральная картинка */
+        .main-image {
+            width: 400px;
+            cursor: pointer;
+        }
+
+        /* Прыжок вверх-вниз */
+        .jump {
+            animation: jumpAnim 0.5s;
+        }
+
+        @keyframes jumpAnim {
+            0% { transform: translateY(0); }
+            25% { transform: translateY(-30px); }
+            50% { transform: translateY(0); }
+            75% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Кнопки слева снизу */
+        .buttons-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: absolute;
+            left: 20px;       
+            bottom: 50px;     
+        }
+
+        .buttons-vertical img {
+            width: 60px;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .buttons-vertical img:hover {
+            transform: scale(1.2);
+            box-shadow: 0px 6px 15px rgba(0,0,0,0.5); /* сильнее тень */
+            cursor: pointer;
+        }
+
+        /* Подвал */
+        .footer {
+            background-color: black;
+            color: white;
+            padding: 10px; /* тоньше полоса */
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Кнопки слева -->
+<div class="buttons-vertical">
+    <a href="https://dexscreener.com/" target="_blank">
+        <img src="dexscreener.png" alt="DexScreener">
+    </a>
+    <a href="https://pump.fun/" target="_blank">
+        <img src="pumpfun.png" alt="PumpFun">
+    </a>
+    <a href="https://x.com/" target="_blank">
+        <img src="X.png" alt="X">
+    </a>
+</div>
+
+<div class="main-section">
+
+    <!-- Левая карусель -->
+    <div class="carousel-container">
+        <div class="carousel left-carousel">
+            <img src="1.png" alt="1">
+            <img src="2.png" alt="2">
+            <img src="3.png" alt="3">
+            <img src="1.png" alt="1">
+            <img src="2.png" alt="2">
+            <img src="3.png" alt="3">
+        </div>
+    </div>
+
+    <!-- Центральная картинка -->
+    <img class="main-image" src="central.png" alt="Центр" id="mainImg">
+
+    <!-- Правая карусель -->
+    <div class="carousel-container">
+        <div class="carousel right-carousel">
+            <img src="4.png" alt="4">
+            <img src="5.png" alt="5">
+            <img src="6.png" alt="6">
+            <img src="4.png" alt="4">
+            <img src="5.png" alt="5">
+            <img src="6.png" alt="6">
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    Адрес: ул. Примерная, 1 | Контакты: +7 999 123-45-67
+</div>
+
+<script>
+    const mainImg = document.getElementById('mainImg');
+ // Создаем аудио через JS, чтобы точно работало
+    const clownSound = new Audio('Vocaroo 1gSPeruSh5GL.mp3'); // путь к файлу mp3 рядом с HTML
+    clownSound.volume = 0.7; // громкость 70%
+
+    mainImg.addEventListener('click', () => {
+        mainImg.classList.add('jump');
+        clownSound.currentTime = 0;
+        clownSound.play().catch(()=>console.log("Ошибка воспроизведения звука"));
+        setTimeout(() => mainImg.classList.remove('jump'), 500);
+    });
+</script>
+
+</body>
+</html>
