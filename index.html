@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -9,14 +9,14 @@
             font-family: Arial;
             text-align: center;
             background-color: #f0f0f0;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .main-section {
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            margin-top: 50px;
+            margin-top: 80px;
             gap: 50px;
         }
 
@@ -24,17 +24,18 @@
         .carousel-container {
             position: relative;
             width: 120px;
-            height: 450px;
+            height: 650px;
             overflow: hidden;
         }
 
         .carousel {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            animation: scrollUp 6s linear infinite; /* одинаковая скорость */
+        }
+
+        .carousel-track {
+            display: flex;
+            flex-direction: column;
         }
 
         .carousel img {
@@ -43,9 +44,23 @@
             margin: 15px 0;
         }
 
+        /* ПЛАВНАЯ БЕСКОНЕЧНАЯ АНИМАЦИЯ */
+        .scroll-up {
+            animation: scrollUp 10s linear infinite;
+        }
+
+        .scroll-down {
+            animation: scrollDown 10s linear infinite;
+        }
+
         @keyframes scrollUp {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(-100%); }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes scrollDown {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0); }
         }
 
         /* Центральная картинка */
@@ -54,7 +69,6 @@
             cursor: pointer;
         }
 
-        /* Прыжок вверх-вниз */
         .jump {
             animation: jumpAnim 0.5s;
         }
@@ -67,7 +81,7 @@
             100% { transform: translateY(0); }
         }
 
-        /* Кнопки слева снизу */
+        /* Кнопки */
         .buttons-vertical {
             display: flex;
             flex-direction: column;
@@ -85,7 +99,7 @@
 
         .buttons-vertical img:hover {
             transform: scale(1.2);
-            box-shadow: 0px 6px 15px rgba(0,0,0,0.5); /* сильнее тень */
+            box-shadow: 0px 6px 15px rgba(0,0,0,0.5);
             cursor: pointer;
         }
 
@@ -93,54 +107,61 @@
         .footer {
             background-color: black;
             color: white;
-            padding: 10px; /* тоньше полоса */
+            padding: 10px;
             position: fixed;
             bottom: 0;
             width: 100%;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
 
-<!-- Кнопки слева -->
+<!-- Кнопки -->
 <div class="buttons-vertical">
     <a href="https://dexscreener.com/" target="_blank">
-        <img src="dexscreener.png" alt="DexScreener">
+        <img src="dexscreener.png">
     </a>
     <a href="https://pump.fun/" target="_blank">
-        <img src="pumpfun.png" alt="PumpFun">
+        <img src="pumpfun.png">
     </a>
     <a href="https://x.com/" target="_blank">
-        <img src="X.png" alt="X">
+        <img src="X.png">
     </a>
 </div>
 
 <div class="main-section">
 
-    <!-- Левая карусель -->
+    <!-- Левая карусель (вверх) -->
     <div class="carousel-container">
-        <div class="carousel left-carousel">
-            <img src="1.png" alt="1">
-            <img src="2.png" alt="2">
-            <img src="3.png" alt="3">
-            <img src="1.png" alt="1">
-            <img src="2.png" alt="2">
-            <img src="3.png" alt="3">
+        <div class="carousel-track scroll-up">
+            <!-- набор -->
+            <img src="1.png">
+            <img src="2.png">
+            <img src="3.png">
+
+            <!-- дубликат -->
+            <img src="1.png">
+            <img src="2.png">
+            <img src="3.png">
         </div>
     </div>
 
-    <!-- Центральная картинка -->
-    <img class="main-image" src="central.png" alt="Центр" id="mainImg">
+    <!-- Центр -->
+    <img class="main-image" src="central.png" id="mainImg">
 
-    <!-- Правая карусель -->
+    <!-- Правая карусель (вниз) -->
     <div class="carousel-container">
-        <div class="carousel right-carousel">
-            <img src="4.png" alt="4">
-            <img src="5.png" alt="5">
-            <img src="6.png" alt="6">
-            <img src="4.png" alt="4">
-            <img src="5.png" alt="5">
-            <img src="6.png" alt="6">
+        <div class="carousel-track scroll-down">
+            <!-- набор -->
+            <img src="4.png">
+            <img src="5.png">
+            <img src="6.png">
+
+            <!-- дубликат -->
+            <img src="4.png">
+            <img src="5.png">
+            <img src="6.png">
         </div>
     </div>
 
@@ -151,17 +172,16 @@
 </div>
 
 <script>
-    const mainImg = document.getElementById('mainImg');
- // Создаем аудио через JS, чтобы точно работало
-    const clownSound = new Audio('Vocaroo 1gSPeruSh5GL.mp3'); // путь к файлу mp3 рядом с HTML
-    clownSound.volume = 0.7; // громкость 70%
+const mainImg = document.getElementById('mainImg');
+ const clownSound = new Audio('Vocaroo 1gSPeruSh5GL.mp3');
+clownSound.volume = 0.7;
 
-    mainImg.addEventListener('click', () => {
-        mainImg.classList.add('jump');
-        clownSound.currentTime = 0;
-        clownSound.play().catch(()=>console.log("Ошибка воспроизведения звука"));
-        setTimeout(() => mainImg.classList.remove('jump'), 500);
-    });
+mainImg.addEventListener('click', () => {
+    mainImg.classList.add('jump');
+    clownSound.currentTime = 0;
+    clownSound.play().catch(()=>{});
+    setTimeout(() => mainImg.classList.remove('jump'), 500);
+});
 </script>
 
 </body>
