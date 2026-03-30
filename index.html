@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Crypto Kwoka</title>
-
 <style>
 body {
     margin: 0;
@@ -62,16 +61,12 @@ body::before {
     object-fit: cover;
     border-radius: 10px;
     flex-shrink: 0;
-
-    /* ✨ НЕОНОВЫЙ GLOW */
     box-shadow: 
         0 0 8px rgba(255, 200, 0, 0.4),
         0 0 15px rgba(255, 200, 0, 0.3);
-
     transition: 0.3s;
 }
 
-/* 🔥 hover эффект */
 .carousel-track img:hover {
     transform: scale(1.1);
     box-shadow:
@@ -82,11 +77,11 @@ body::before {
 
 /* Анимация */
 .scroll-up {
-    animation: scrollUp 9s linear infinite;
+    animation: scrollUp 13s linear infinite;
 }
 
 .scroll-down {
-    animation: scrollDown 9s linear infinite;
+    animation: scrollDown 13s linear infinite;
 }
 
 @keyframes scrollUp {
@@ -107,28 +102,20 @@ body::before {
     top: 60px;
     z-index: 10;
     left: 45px;
-
-    /* 🌊 ПЛАВАЮЩАЯ АНИМАЦИЯ */
     animation: float 3s ease-in-out infinite;
-
-    /* ✨ НЕОН */
     box-shadow:
         0 0 15px rgba(255, 200, 0, 0.5),
         0 0 30px rgba(255, 200, 0, 0.4);
-
     border-radius: 20px;
-
     transition: transform 0.1s linear;
 }
 
-/* плавание */
 @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-12px); }
     100% { transform: translateY(0px); }
 }
 
-/* прыжок */
 .jump {
     animation: jumpAnim 0.5s;
 }
@@ -155,10 +142,7 @@ body::before {
 .buttons-vertical img {
     width: 60px;
     border-radius: 50%;
-
-    /* ✨ glow */
     box-shadow: 0 0 10px rgba(255, 200, 0, 0.5);
-
     transition: 0.3s;
 }
 
@@ -181,34 +165,52 @@ body::before {
     z-index: 10;
 }
 
+/* Падающие предметы */
+.falling-item {
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    pointer-events: auto;
+    z-index: 20;
+    cursor: pointer;
+    transition: transform 0.1s linear;
+}
+
+/* Score */
+#scoreEl {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+    z-index: 15;
+}
+
+/* To the Moon по центру */
+#moonEl {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+    color: #ff69b4;
+    text-shadow: 0 0 15px #ff69b4;
+    z-index: 15;
+    display: none;
+}
+
 /* 📱 МОБИЛКА */
 @media (max-width: 768px) {
-
-    .carousel-container {
-        display: none;
-    }
-
-    .main-image {
-        width: 260px;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 80px;
-    }
-
-    .buttons-vertical {
-        flex-direction: row;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 20px;
-    }
-
-    .buttons-vertical img {
-        width: 50px;
-    }
+    .carousel-container { display: none; }
+    .main-image { width: 260px; left: 50%; transform: translateX(-50%); top: 80px; }
+    .buttons-vertical { flex-direction: row; left: 50%; transform: translateX(-50%); bottom: 20px; }
+    .buttons-vertical img { width: 50px; }
 }
 </style>
 </head>
-
 <body>
 
 <!-- Кнопки -->
@@ -218,7 +220,7 @@ body::before {
     <a href="https://x.com/" target="_blank"><img src="X.png"></a>
 </div>
 
-<!-- Левая -->
+<!-- Левая карусель -->
 <div class="carousel-container carousel-left">
     <div class="carousel-track scroll-up">
         <img src="1.png"><img src="2.png"><img src="3.png">
@@ -227,7 +229,7 @@ body::before {
     </div>
 </div>
 
-<!-- Правая -->
+<!-- Правая карусель -->
 <div class="carousel-container carousel-right">
     <div class="carousel-track scroll-down">
         <img src="4.png"><img src="5.png"><img src="6.png">
@@ -236,19 +238,28 @@ body::before {
     </div>
 </div>
 
-<!-- Центр -->
+<!-- Центральная картинка -->
 <div class="main-section">
     <img class="main-image" src="central.png" id="mainImg">
 </div>
 
+<!-- Score и To the Moon -->
+<div id="scoreEl">Score: 0</div>
+<div id="moonEl">TO THE MOON 🚀</div>
+
 <div class="footer">
-    Адрес: ул. Примерная, 1 | Контакты: +7 999 123-45-67
+    Daeoong_
 </div>
 
 <script>
 const mainImg = document.getElementById('mainImg');
 const clownSound = new Audio('Vocaroo 1gSPeruSh5GL.mp3');
 clownSound.volume = 0.7;
+let score = 0;
+const scoreEl = document.getElementById('scoreEl');
+const moonEl = document.getElementById('moonEl');
+let lastClick = 0;
+let clickStreak = 0;
 
 mainImg.addEventListener('click', () => {
     mainImg.classList.add('jump');
@@ -257,24 +268,73 @@ mainImg.addEventListener('click', () => {
     setTimeout(() => mainImg.classList.remove('jump'), 500);
 });
 
-/* параллакс только на ПК */
-if (window.innerWidth > 768) {
+/* параллакс */
+if(window.innerWidth>768){
     const main = document.querySelector(".main-image");
     const left = document.querySelector(".carousel-left");
     const right = document.querySelector(".carousel-right");
-
-    document.addEventListener("mousemove", (e) => {
-        const x = (e.clientX / window.innerWidth - 0.5);
-        const y = (e.clientY / window.innerHeight - 0.5);
-
-        main.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
-        left.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
-        right.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
-
-        document.body.style.backgroundPosition = `${50 + x * 5}% ${50 + y * 5}%`;
+    document.addEventListener("mousemove",(e)=>{
+        const x = (e.clientX/window.innerWidth-0.5);
+        const y = (e.clientY/window.innerHeight-0.5);
+        main.style.transform = `translate(${x*30}px, ${y*30}px)`;
+        left.style.transform = `translate(${x*20}px, ${y*20}px)`;
+        right.style.transform = `translate(${x*20}px, ${y*20}px)`;
+        document.body.style.backgroundPosition = `${50+x*5}% ${50+y*5}%`;
     });
 }
-</script>
 
+/* падающие предметы */
+const itemsData = [
+    {src:'coin.png', value:1, sound:new Audio('pop.mp3')},
+    {src:'watermelon.png', value:3, sound:new Audio('pop.mp3')},
+    {src:'orange.png', value:2, sound:new Audio('pop.mp3')}
+];
+
+function spawnItem(){
+    const data = itemsData[Math.floor(Math.random()*itemsData.length)];
+    const item = document.createElement("img");
+    item.src = data.src;
+    item.className="falling-item";
+    item.style.left=Math.random()*(window.innerWidth-50)+"px";
+    item.style.top="-60px";
+    document.body.appendChild(item);
+
+    const speed = 1 + Math.random()*1.5; // сниженная скорость
+
+    function fall(){
+        let top = parseFloat(item.style.top);
+        top += speed;
+        item.style.top = top+"px";
+        if(top<window.innerHeight) requestAnimationFrame(fall);
+        else item.remove();
+    }
+    requestAnimationFrame(fall);
+
+    item.onclick=(e)=>{
+        score += data.value;
+        scoreEl.textContent = "Score: "+score;
+        data.sound.currentTime=0;
+        data.sound.play().catch(()=>{});
+        let now = Date.now();
+        if(now-lastClick<1500) clickStreak++;
+        else clickStreak=1;
+        lastClick=now;
+        if(clickStreak>=10){ 
+            moonEl.style.display="block";
+            setTimeout(()=>moonEl.style.display="none",1000);
+            clickStreak=0;
+        }
+        const plus = document.createElement("div");
+        plus.className="plus";
+        plus.innerText="+"+data.value;
+        plus.style.left=e.clientX+"px";
+        plus.style.top=e.clientY+"px";
+        document.body.appendChild(plus);
+        setTimeout(()=>plus.remove(),800);
+        item.remove();
+    };
+}
+setInterval(spawnItem,800);
+</script>
 </body>
 </html>
